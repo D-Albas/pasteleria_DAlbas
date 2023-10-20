@@ -38,3 +38,26 @@
     </div>
   </div>
 </div>
+<!-- Modal -->
+<div class="modal fade" id="modalApp" tabindex="-1" aria-labelledby="modalAppLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: #fc77a7;">
+        <h1 class="modal-title text-white fw-bold" id="modalApplLabel">QR - Aplicación móvil</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        {% load static %}
+        <div class="text-center">
+          <img src="{% static '../static/images/qrApp.png' %}" alt="">
+        </div>
+        <span class="text-center h4">
+          <p>Escanea el código QR para descargar la aplicación móvil de D'Albas.</p>
+        </span>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger text-white fw-bold" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
