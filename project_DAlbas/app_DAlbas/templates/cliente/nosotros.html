@@ -1,0 +1,62 @@
+{% extends "index.html" %}
+{% block encabezado %}
+{% include "cliente/encabezado.html" %}
+{% endblock %}
+{% block contenido %}
+{% load static %}
+<section class="nosotros" id="nosotros">
+    <h1 class="heading"> ¿Qué es <span>D'Albas?</span></h1>
+
+    <div class="box-container">
+
+        <div class="box">
+            <img src="{%static '../static/images/mision.jpg' %}" style="border-radius: 20%;">
+            <h3>Misión</h3>
+            <p>La misión de D'albas pastelería es brindar productos de alta calidad, hechos con ingredientes locales, que cumplan con las necesidades y expectativas de los clientes. La empresa se distingue por su compromiso con la innovación, la responsabilidad y creatividad. La empresa aspira a ser una marca líder reconocida por su excelencia, variedad y sabor.</p>
+        </div>
+
+        <div class="box">
+            <img src="{%static '../static/images/vision.jpg' %}" style="border-radius: 20%;">
+            <h3>Visión</h3>
+            <p>Su visión es ser una marca reconocida y preferida por los consumidores, que se distingue por su innovación, creatividad y compromiso con la satisfacción de sus clientes.</p>
+        </div>
+
+        <div class="box">
+            <img src="{%static '../static/images/about_me.jpg' %}" alt="" style="border-radius: 20%;">
+            <h3>Nosotros</h3>
+            <p>D'Albas es una pastelería fundada por mujeres huilenses en 2013. Ofrece tortas, cupcakes y galletas personalizadas de alta calidad. Comenzó como un proyecto familiar y ha crecido hasta tener presencia en línea y un local con un servicio excepcional.</p>
+        </div>
+    </div>
+</section>
+
+
+<section class="nosotros mb-4" id="nosotros">
+    <h1 class="heading">Nuestros<span>empleados</span></h1>
+
+    <div class="box-container">
+        <div class="box">
+            <div class="imagen col-md-4 rounded mx-auto d-block">
+                <img class="grande" src="{%static '../static/images/boss.png' %}" alt="" style="border-radius: 50%;">
+            </div>
+            <h3>Alba Denis Morea</h3>
+            <p>D' Albas es una empresa pastelera que se dedica a la elaboración de tortas personalizadas para todo tipo de eventos. Su equipo está formado por madre e hija: Alba Denis Morea y Ximena Rodriguez Morea. Alba es la propietaria y la horneadora de los pasteles, encargada de preparar las masas, los rellenos y las coberturas con ingredientes de calidad.</p>
+            <p class="card-text"><small class="text-body-secondary">Propietaria.</small></p>
+        </div>
+
+        <div class="box">
+            <div class="imagen col-md-4 rounded mx-auto d-block">
+                <img class="grande" src="{%static '../static/images/empleado.jpg' %}" alt="" style="border-radius: 50%;">
+            </div>
+            <h3>Ximena Rodriguez Morea</h3>
+            <p>D' Albas es una empresa pastelera que se dedica a la elaboración de tortas personalizadas para todo tipo de eventos. Su equipo está formado por  madre e hija: Alba Denis Morea y Ximena Rodriguez Morea. Ximena es la diseñadora de las tortas, responsable de crear los decorados más originales y creativos según los gustos y preferencias de los clientes. Juntas, ofrecen un servicio profesional, puntual y delicioso.</p>
+            <p class="card-text"><small class="text-body-secondary">Diseñadora.</small></p>
+        </div>
+
+    </div>
+</section>
+<br><br><br><br>
+{% endblock %}
+
+{% block footer %}
+{% include "cliente/footer.html" %}
+{% endblock %}

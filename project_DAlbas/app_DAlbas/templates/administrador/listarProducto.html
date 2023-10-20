@@ -1,0 +1,91 @@
+{% extends "index.html" %}
+
+{% block encabezado %}
+{% include "administrador/encabezado.html" %}
+{% endblock %}
+
+{% block contenido %}
+<div class="container">
+    <h1 class="titleInicial heading">
+        Nuestros <span> productos</span>
+      </h1>
+</div>
+<div id="tableClientes" class="w-100 table-responsive card container pt-3 pb-3" style="margin: 0 auto;">
+    <table class="table table-hover table-bordered table-stripped mt-5 mb-5 display" id="tblProductos">
+        <thead >
+            <tr class="text-dark text-center">
+                <th class="text-center">Producto</th>
+                <th class="text-center">Imagen</th>
+                <th class="text-center">Precio</th>
+                <th class="text-center">Categoria</th>
+                <th class="text-center">Tematica</th>
+                <th class="text-center">Sabor</th>
+                <th class="text-center">Peso</th>
+                <th class="text-center">Editar</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for producto in listaProductos %}
+                <tr>
+                    <td class="text-center" style="font-size: 15px; vertical-align: middle;">{{producto.nombreProducto}}</td>
+                    <td class="text-center" style="vertical-align: middle;">
+                        <img class="rounded" id="imgProducto" src="/media/{{producto.imagenProducto}}" alt="imagen del producto" width="50" height="50">
+                    </td>
+                    <td class="text-center precio" style="font-size: 15px; vertical-align: middle;">$ {{producto.precioProducto}}</td>
+                    <td class="text-center" style="font-size: 15px; vertical-align: middle;">{{producto.categoriaProducto}}</td>
+                    <td class="text-center" style="font-size: 15px; vertical-align: middle;">{{producto.tematicaProducto}}</td>
+                    <td class="text-center" style="font-size: 15px; vertical-align: middle;">{{producto.saborProducto}}</td>
+                    <td class="text-center" style="font-size: 15px; vertical-align: middle;">{{producto.unidadMedidaProducto}}</td>
+                    <td class="text-center" style="font-size: 15px; vertical-align: middle;">
+                        <a href="/consultarProducto/{{producto.id}}"><i class="fa fa-edit text-warning editarProducto"></i></a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<br><br><br><br><br>
+<div>
+    {% if messages %}
+        {% for mensaje in messages %}
+            <script>
+                Swal.fire({
+                    title: "Actualizar Producto",
+                    text: "{{ mensaje }}",
+                    icon: "{{ mensaje.tags }}"
+                });
+            </script>
+        {% endfor %}
+    {% endif %}
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var precios = document.querySelectorAll('.precio');
+        precios.forEach(function (precio) {
+            var precioSinFormato = precio.textContent.split('$ ')[1];
+            var precioFormateado = parseFloat(precioSinFormato).toLocaleString('es-CO', {
+                style: 'currency',
+                currency: 'COP',
+                minimumFractionDigits: 0
+            }); 
+
+            precio.textContent = precioFormateado;
+        });
+    });
+
+    let table = new DataTable('#tblProductos', {
+        language: {
+            "url": "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json" 
+        },
+        ordering: false,
+        lengthMenu: [
+            [10, 25, 50, -1],
+            [10, 25, 50, 'Todo']
+        ]   
+    });
+</script>
+{% endblock %}
+
+{% block footer %}
+{% include "administrador/footer.html" %}
+{% endblock %}

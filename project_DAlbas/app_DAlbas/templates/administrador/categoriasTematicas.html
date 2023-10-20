@@ -1,0 +1,83 @@
+{% extends "index.html" %}
+
+{% block encabezado %}
+{% include "administrador/encabezado.html" %}
+{% endblock %}
+
+{% block contenido %}
+<div class="container">
+    <h1 class="titleInicial heading">
+        Lista <span>Categorias</span>
+      </h1>
+</div>
+<div id="tableClientes" class="table-responsive card container pt-3 pb-3" style="margin: 0 auto;">
+    <table class="table table-hover table-bordered table-stripped mt-5 mb-5 display" id="tblCategorias">
+        <thead >
+            <tr class="text-dark text-center">
+                <th class="text-center">#</th>
+                <th class="text-center">Nombre de la categoría</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for categoria in categorias %}
+                <tr>
+                    <td class="text-center" style="font-size: 15px; vertical-align: middle;">{{categoria.id}}</td>
+                    <td class="text-center" style="font-size: 15px; vertical-align: middle;">{{categoria.nombreCategoria}}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<br>
+<div class="container">
+    <h1 class="titleInicial heading" >
+        Lista <span> temáticas</span>
+      </h1>
+</div>
+<div id="tableClientes" class="table-responsive card container pt-3 pb-3" style="margin-top: -10px;">
+    <table class="table table-hover table-bordered table-stripped mt-5 mb-5 display" id="tblTemtaticas">
+        <thead >
+            <tr class="text-dark text-center">
+                <th class="text-center">#</th>
+                <th class="text-center">Nombre de la temática</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for tematica in tematicas %}
+                <tr>
+                    <td class="text-center" class="text-center" style="font-size: 15px; vertical-align: middle;">{{tematica.id}}</td>
+                    <td class="text-center" style="font-size: 15px; vertical-align: middle;">{{tematica.nombreTematica}}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<br><br><br>
+<script>
+    let tableCategorias = new DataTable('#tblCategorias', {
+        language: {
+            "url": "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json" 
+        },
+        ordering: false,
+        lengthMenu: [
+        [10, 25, 50, -1],
+        [10, 25, 50, 'Todo']
+        ]
+    });
+
+    let tableTematicas = new DataTable('#tblTemtaticas', {
+        language: {
+            "url": "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json" 
+        },
+        ordering: false,
+        lengthMenu: [
+        [10, 25, 50, -1],
+        [10, 25, 50, 'Todo']
+        ]
+    });
+</script>
+{% endblock %}
+
+{% block footer %}
+{% include "administrador/footer.html" %}
+{% endblock %}

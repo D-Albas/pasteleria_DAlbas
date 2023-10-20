@@ -1,0 +1,222 @@
+{% extends "index.html" %}
+{% block encabezado %}
+{% include "cliente/encabezado.html" %}
+{% endblock %}
+{% block contenido %}
+{% load static %}
+<script src="{% static 'js/pedidos_client.js' %}"></script>
+{% if request.session.carrito.items %}
+  {% for key, value in request.session.carrito.items %}
+  <script> cargarProductos("{{value.producto_id}}","{{value.nombre}}","{{value.precio_unitario}}","{{value.acumulado}}","{{value.cantidad}}");</script>
+  {% endfor %}
+{% endif %}
+
+<div class="container mb-5">
+  <h1 class="heading" name="pastillaje">Carrito de <span> compras</span></h1>
+  <div class="card" style="margin-top: -3rem;">
+    <div id="vistaTablaPedidos" class="w-100 table-responsive card container mx-auto px-4">
+      <br><br><hr>
+      <table class="table table-hover table-stripped my-auto" id="tblProductosPedidos">
+          <thead>
+              <tr>
+                <th colspan="6" scope="col" class="text-center">MIS PRODUCTOS</th>
+              </tr>
+              <tr class="text-dark">
+                  <th scope="col" class="text-center" hidden>ID</th>
+                  <th scope="col" class="text-center">Imagen</th>
+                  <th scope="col">Producto</th>
+                  <th scope="col">Precio Unitario</th>
+                  <th scope="col">Precio Acumulado</th>
+                  <th scope="col" class="text-center">Cantidad</th>
+                  <th scope="col" class="text-center">Acción</th>
+              </tr>
+          </thead>
+          <tbody id="datosTablaPedido">
+            {% if request.session.carrito.items %}
+            {% for key, value in request.session.carrito.items %}
+              <tr class="py-4">
+                <td style="vertical-align: middle;" hidden>{{value.producto_id}}</td>
+                <td class="text-center" style="vertical-align: middle;">
+                  <img src="{{ value.imagen }}" alt="{{ value.nombre }}" height="50" width="50">
+                </td>
+                <td style="vertical-align: middle;">{{value.nombre}}</td>
+                <td style="vertical-align: middle;" class="precio">$ {{value.precio_unitario}}</td>
+                <td style="vertical-align: middle;" class="precio">$ {{value.acumulado}}</td>
+                <td class="text-center" style="vertical-align: middle;">
+                  <a href="{% url 'Aum' value.producto_id %}" class="mx-3 btn fw-bold aum" style="border-color: #F285AD;">+</a>
+                  {{value.cantidad}}
+                  <a href="{% url 'Sub' value.producto_id %}" class="mx-3 btn fw-bold sub" style="border-color: #F285AD;">-</a>
+                </td>
+                <td class="text-center" style="vertical-align: middle;">
+                  <!-- <span>
+                    <a href="{% url 'Aum' value.producto_id %}" class="btn text-white fw-bold" style="background-color: #F285AD;">+</a>
+                    <a href="{% url 'Sub' value.producto_id %}" class="btn text-white fw-bold" style="background-color: #F285AD;">-</a>
+                  </span> -->
+                  <a href="{% url 'Del' value.producto_id %}" class="btn btn-danger badge-dark text-white" >
+                    <i class="fa fa-trash"></i>
+                  </a>
+                </td>
+              </tr>
+            {% endfor %}
+            {% else %}
+              <tr class="table-danger">
+                <td colspan="6" class="text-center" style="vertical-align: middle;">
+                  <span style="font-size: 13px;">Carrito de compras vacio.</span><br>
+                  <span style="font-size: 13px;">Agrega un producto.</span>
+                </td>
+              </tr>
+            {% endif %}
+          </tbody>
+      </table>
+      <br>
+      <p class="mt-3 h3 mx-3">Total: <span class="precio">$ {{total_carrito}}</span></p>
+      <br><hr><br>
+  </div>
+  </div>
+  <br>
+  <br>
+  <a href="{% url 'CLS' %}" class="btn btn-danger text-white fw-bold" style="font-size: 17px;">Limpiar carrito</a>
+  <!-- <a href="#" class="btn btn-primary text-white mx-2" style="font-size: 17px;">Realizar Pedido</a> -->
+  <button type="button" class="btn btn-primary text-white mx-2 fw-bold" style="font-size: 17px;" data-bs-toggle="modal" data-bs-target="#modalPedido" data-bs-whatever="@getbootstrap">Realizar pedido</button>
+  <br><br><br>
+</div>
+
+<div class="modal fade" id="modalPedido" tabindex="-1" aria-labelledby="modalPedidoLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: #fc77a7;">
+        <h1 class="modal-title text-white fw-bold" id="modalPedidoLabel">REGISTRAR PEDIDO</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group row m-4">
+            <div class="mb-3 col-lg-6">
+                <label for="txtNombreCliente" class="form-label mx-1">Nombre del cliente:</label>
+                <input type="text" name="txtNombreCliente" id="txtNombreCliente" class="form-control" value="{{ cliente.first_name }} {{ cliente.last_name }}" disabled required>
+            </div>                
+            <div class="mb-3 col-lg-6">
+                <label for="txtTelefono" class="form-label mx-1">Teléfono:</label>
+                <input type="tel" name="txtTelefono" id="txtTelefono" class="form-control" value="{{ cliente.telefonoCliente }}" disabled required>
+            </div>                
+            <div class="mb-3 col-lg-6">
+                <label for="txtFechaHoraPedido" class="form-label mx-1">Fecha del pedido:</label>
+                <input type="datetime-local" name="txtFechaHoraPedido" id="txtFechaHoraPedido" class="form-control" min="{{ today|date:'Y-m-d' }}T00:00" step="3600" required>
+            </div>                
+            <div class="mb-3 col-lg-6">                                    
+                <label for="cbMetodoPago" class="form-label mx-1">Método de pago:</label>
+                <select name="cbMetodoPago" id="cbMetodoPago" class="form-select" required>
+                    <option value="Transferencia" id="optionTransferencia" selected>Transferencia</option>
+                    <option value="Efectivo" id="optionEfectivo" disabled>Efectivo</option>
+                </select>           
+            </div>
+            <div class="mb-3 col-lg-6">
+              <label for="txtCorreo" class="form-label mx-1">Correo electrónico:</label>
+              <input type="email" name="txtCorreo" id="txtCorreo" class="form-control" value="{{ cliente.email }}" disabled required>
+            </div> 
+            <div class="mb-3 col-lg-3 px-5" style="margin-top: 25px;">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="change_info" name="change_info">
+                <label class="form-check-label" for="change_info">
+                  Cambiar información
+                </label>
+              </div>
+            </div> 
+            <div class="mb-3 col-lg-3" style="margin-top: 25px;">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="enable_payment" name="enable_payment">
+                <label class="form-check-label" for="enable_payment">
+                  Habilitar método de pago
+                </label>
+              </div>
+            </div> 
+            {% if request.session.carrito.items %}
+              {% for key, value in request.session.carrito.items %}
+                <div class="mb-3 col-lg-4">
+                  <input type="hidden" name="txtProducto" id="txtProducto" class="form-control" value="{{value.producto_id}}">
+                </div>
+                <div class="mb-3 col-lg-4">
+                  <input type="hidden" name="txtprecioProducto" id="txtprecioProducto" class="form-control" value="{{value.precio_unitario}}">
+                </div>
+                <div class="mb-3 col-lg-4">
+                  <input type="hidden" name="txtcantidadProducto" id="txtcantidadProducto" class="form-control" value="{{value.cantidad}}">
+                </div>
+              {% endfor %}
+            {% endif %}
+            <div class="mb-3 col-lg-4">
+              <button class="btn btn-primary btn-lg" id="btnAgregarDetallePedidoUser">Ver detalle del pedido</button>
+            </div>
+            <br>
+            <br>
+            <hr class="mt-5 mb-5">
+            <br>
+            <br>
+            <div id="vistaDetallePedido" class="w-75 table-responsive card container" style="margin: 0 auto">
+              <table class="table table-hover table-stripped mt-3" id="tblProductosPed">
+                  <thead >
+                      <tr>
+                          <th colspan="7" class="text-center">DETALLE PEDIDO</th>
+                      </tr>
+                      <tr class="text-dark">
+                          <th scope="col">Producto</th>
+                          <th scope="col">Precio Unitario</th>
+                          <th scope="col">Precio Acumulado</th>
+                          <th scope="col" class='text-center'>Cantidad</th>
+                      </tr>
+                  </thead>
+                  <tbody id="datosTablaPedidosCliente">
+                      
+                  </tbody>
+              </table>
+              <br>
+              <p class="mt-3 h3 mx-4" id="totalAPagar">Total: $0.00</p>
+              <br>
+          </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger fw-bold text-white btn-lg" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn text-white fw-bold btn-lg" id="btnRegistrarPedidoUser" style="background-color: #F285AD;">Finalizar pedido</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+      var precios = document.querySelectorAll('.precio');
+      precios.forEach(function (precio) {
+          var precioSinFormato = precio.textContent.split('$ ')[1];
+          var precioFormateado = parseFloat(precioSinFormato).toLocaleString('es-CO', {
+              style: 'currency',
+              currency: 'COP',
+              minimumFractionDigits: 0
+          }); 
+
+          precio.textContent = precioFormateado;
+      });
+  });
+
+  const changeInfoCheckbox = document.getElementById('change_info');
+  const enablePaymentCheckbox = document.getElementById('enable_payment');
+  const cbMetodoPago = document.getElementById('cbMetodoPago');
+  const optionEfectivo = document.getElementById('optionEfectivo');
+  const txtCorreo = document.getElementById('txtCorreo');
+  const txtNombreCliente = document.getElementById('txtNombreCliente');
+  const txtTelefono = document.getElementById('txtTelefono');
+
+  changeInfoCheckbox.addEventListener('change', function() {
+    txtCorreo.disabled = !changeInfoCheckbox.checked;
+    txtNombreCliente.disabled = !changeInfoCheckbox.checked;
+    txtTelefono.disabled = !changeInfoCheckbox.checked;
+  });
+
+  enablePaymentCheckbox.addEventListener('change', function() {
+    cbMetodoPago.disabled = !enablePaymentCheckbox.checked;
+    optionEfectivo.disabled = !enablePaymentCheckbox.checked;
+  });
+</script>
+{% endblock %}
+{% block footer %}
+{% include "cliente/footer.html" %}
+{% endblock %}

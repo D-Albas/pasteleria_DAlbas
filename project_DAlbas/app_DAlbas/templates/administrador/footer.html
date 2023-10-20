@@ -1,0 +1,105 @@
+{% load static %}
+<script src="{% static 'js/categoriaTematica.js' %}"></script>
+
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-9 text-center">
+      <h2>Módulo Administrativo</h3>
+      <div class="copyright">
+        <hr>
+        <p class="mb-0">
+          <small>&copy; Derechos reservador Wolsoft | SENA.</small>
+        </p>
+      </div> 
+    </div>
+    <div class="clock mt-4 text-center">
+      <p id="date" class="h4"></p>
+      <p id="time" class="h3"></p>
+    </div>
+  </div>
+</div>
+
+<!-- Modal categorias-->
+<div class="modal fade" id="modalCategoria" tabindex="-1" aria-labelledby="modalCategoriaLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: #fc77a7;">
+        <h1 class="modal-title text-white fw-bold" id="modalCategorialLabel" style="text-transform: uppercase;">Registrar categoría</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+          <form class="mx-2" id="frmRegistroCategorias" autocomplete="off" enctype="multipart/form-data" novalidate>
+              <div class="mt-3 form-floating mb-3">
+                  <input type="text" class="form-control form-control-lg" id="txtCategoria" name="txtCategoria" placeholder="Ingrese la nueva categoría:" autocomplete="off">
+                  <label for="txtCategoria" class="col-form-label">Ingrese la nueva categoría:</label>
+              </div>
+              <br>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-lg btn-danger text-white fw-bold" data-bs-dismiss="modal">Cancelar</button>
+                  <button type="button" class="btn btn-lg text-white fw-bold" id="btnRegistrarCategoria" style="background-color: #fc77a7;">Registrar</button>
+              </div>
+          </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal temáticas-->
+<div class="modal fade" id="modalTematica" tabindex="-1" aria-labelledby="modalTematicaLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: #fc77a7;">
+        <h1 class="modal-title text-white fw-bold" id="modalTematicaLabel" style="text-transform: uppercase;">Registrar temática</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+          <form class="mx-2" id="frmRegistroTematica" autocomplete="off" enctype="multipart/form-data" novalidate>
+              <div class="mt-3 form-floating mb-3">
+                  <input type="text" class="form-control form-control-lg" id="txtTematica" name="txtTematica" placeholder="Ingrese la nueva categoría:" autocomplete="off">
+                  <label for="txtTematica" class="col-form-label">Ingrese la nueva temática:</label>
+              </div>
+              <br>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-lg btn-danger text-white fw-bold" data-bs-dismiss="modal">Cancelar</button>
+                  <button type="button" class="btn btn-lg text-white fw-bold" id="btnRegistrarTematica" style="background-color: #fc77a7;">Registrar</button>
+              </div>
+          </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="text-center">
+  {% if mensaje %}
+      <script>
+          Swal.fire("Error!", '{{mensaje}}', "info")
+      </script>
+  {% endif %}
+</div>
+<script>
+  const WEEK = ["Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sabado"];
+
+  function updateTime() {
+    var now = new Date();
+    var hours = now.getHours();
+    var ampm = hours >= 12 ? 'PM' : 'AM';
+
+    hours = hours % 12;
+    hours = hours ? hours : 12;
+
+    //document.getElementById("time").innerText = zeroPadding(now.getHours(), 2) + ":" + zeroPadding(now.getMinutes(), 2) + ":" + zeroPadding(now.getSeconds(), 2);
+    
+    //document.getElementById("date").innerText = now.getFullYear() + "-" + zeroPadding(now.getMonth() + 1, 2) + "-" + zeroPadding(now.getDate(), 2) + " " + WEEK[now.getDay()];
+  
+    document.getElementById("time").innerText = zeroPadding(hours, 2) + ":" + zeroPadding(now.getMinutes(), 2) + ":" + zeroPadding(now.getSeconds(), 2) + " " + ampm;
+    
+    document.getElementById("date").innerText = now.getFullYear() + "-" + zeroPadding(now.getMonth() + 1, 2) + "-" + zeroPadding(now.getDate(), 2) + " " + WEEK[now.getDay()];
+  }
+
+  updateTime();
+  setInterval(updateTime, 1000);
+
+  function zeroPadding(num, digit) {
+    return String(num).padStart(digit, '0');
+  }
+</script>
